@@ -12,12 +12,12 @@ import styles from './PokemonCard.module.css'
 
 const PokemonCard = ({ name, avatar, types, isEmptyResult }) => {
     return (
-        <Grid key={name} item xs={3} sm={4} md={4} p={2}>
+        <Grid key={name} item xs={3} sm={4} md={4} >
 
-            <Card sx={{ maxWidth: 345, boxShadow: 5, }} className={styles.scale}>
+            <Card sx={{ maxWidth: 345, boxShadow: 5, minHeight: {lg: 490, md: 400, sm: 400}}}  className={styles.scale}>
                 <CardMedia
                     component="img"
-                    height={'auto'}
+                   sx={{ height:{lg: 345, md: 300, sm: 350}}}
                     image={avatar}
                     alt={name}
                 />

@@ -22,11 +22,12 @@ export default function AppWrapper() {
   const P = new Pokedex();
   // 2.create initial state for pokemons
   const [pokemonsNames, setPokemonsNames] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 3.get all pokemons [{...}, 1154] and set it
   useEffect(() => {
     P.getPokemonsList().then(({ results }) => {
-      setPokemonsNames(results)
+      setPokemonsNames(results);
     }
     )
   }, []);
@@ -69,6 +70,7 @@ export default function AppWrapper() {
     pokemonType: [],
   });
   const [isEmptyResult, setIsEmptyResult] = useState(false);
+
   useEffect(() => {
     setIsEmptyResult(false);
 
@@ -85,7 +87,7 @@ export default function AppWrapper() {
 
     (async function () {
       let filtered = filters.pokemonType.length > 0 ? [] : pokemonsNames;
-
+      setIsLoading(true);
       if (filters.pokemonType.length > 0) {
         const results = await P.getTypeByName(
           filters.pokemonType.map(({ type }) => type)
@@ -95,7 +97,7 @@ export default function AppWrapper() {
           .reduce((acc, arr) => [...acc, ...arr])
           .map(({ pokemon }) => ({ name: pokemon.name }));
       }
-      
+
 
       if (filters.pokemonName) {
         filtered = filtered.filter(({ name }) =>
@@ -107,6 +109,7 @@ export default function AppWrapper() {
         setIsEmptyResult(true);
       }
       setFilteredPokemons(filtered);
+      setIsLoading(false);
       // setPokemonCount(filtered.length);
     })();
     setCurrentPage(0);
@@ -123,6 +126,7 @@ export default function AppWrapper() {
         stats,
       }))))
   }, [pokemonsNames.length, pokemonsPerPage, currentPage, searchValue, filteredPokemons]);
+  console.log(isLoading)
 
   // 5.function for search pokemon 
   const searchedPokemon = pokemonsNames.filter(p => p.name.includes(searchValue));
@@ -151,23 +155,26 @@ export default function AppWrapper() {
 
   return (
     <div>
-      <Container maxWidth="xl">
-        {pokemonsNames.length === 0 ?
-          <Preloader /> : <Header theme={theme} pokemonsNames={pokemonsNames} searchClickHendler={searchClickHendler} setSearchValue={setSearchValue} searchValue={searchValue} isOpen={isOpen} searchedPokemon={searchedPokemon} itemClickHendler={itemClickHendler} />}
-        {filteredPokemons.length === 0 ? <AlertNotFound /> :
-          <Container maxWidth="lg">
-          <Grid container spacing={2} mt={2} justifyContent='center'>
-           <Grid item lg={6} md={4} xs={12} > <SearchByType pokemonTypes={pokemonTypes} filters={filters} setFilters={setFilters} pokemonNames={pokemonsNames}/></Grid>
-          <Grid item>
-                <Pagination currentPage={currentPage} totalPokemons={filteredPokemons.length === 0 ? pokemonsNames.length : filteredPokemons.length}
-                  pokemonsPerPage={pokemonsPerPage} handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} pokemonsPerPageOptions={pokemonsPerPageOptions} />
-          </Grid>
-          </Grid>
-            <PokemonList pokemons={pokemons} isEmptyResult={isEmptyResult}/>
-            <Pagination currentPage={currentPage} totalPokemons={filteredPokemons.length === 0 ? pokemonsNames.length : filteredPokemons.length} pokemonsPerPage={pokemonsPerPage} handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} pokemonsPerPageOptions={pokemonsPerPageOptions} />
-          </Container>
-        }
-      </Container>
+      {isLoading ?
+        <Preloader /> :
+        <Container maxWidth="xl">
+          <Header theme={theme} pokemonsNames={pokemonsNames} searchClickHendler={searchClickHendler} setSearchValue={setSearchValue} searchValue={searchValue} isOpen={isOpen} searchedPokemon={searchedPokemon} itemClickHendler={itemClickHendler} />
+          {filteredPokemons.length === 0 ? <AlertNotFound /> :
+            <Container maxWidth="lg">
+              <Grid container spacing={2} mt={2} justifyContent='center'>
+                <Grid item lg={6} md={4} xs={12} > <SearchByType pokemonTypes={pokemonTypes} filters={filters} setFilters={setFilters} pokemonNames={pokemonsNames} /></Grid>
+                <Grid item>
+                  <Pagination currentPage={currentPage} totalPokemons={filteredPokemons.length === 0 ? pokemonsNames.length : filteredPokemons.length}
+                    pokemonsPerPage={pokemonsPerPage} handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} pokemonsPerPageOptions={pokemonsPerPageOptions} />
+                </Grid>
+              </Grid>
+              <PokemonList pokemons={pokemons} isEmptyResult={isEmptyResult} />
+              <Pagination currentPage={currentPage} totalPokemons={filteredPokemons.length === 0 ? pokemonsNames.length : filteredPokemons.length} pokemonsPerPage={pokemonsPerPage} handleChangePage={handleChangePage} handleChangeRowsPerPage={handleChangeRowsPerPage} pokemonsPerPageOptions={pokemonsPerPageOptions} />
+            </Container>
+          }
+        </Container>
+      }
+
     </div>
   )
 }

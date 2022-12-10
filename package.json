@@ -1,7 +1,7 @@
 {
   "name": "my-pokemon-app",
   "version": "0.1.0",
-  "homepage": "https://DrozdovDenys.github.io/pokedex-react-app ",
+  "homepage": "https://DrozdovDenys.github.io/pokedex-react-app",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
