@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Container, Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { deepOrange } from '@mui/material/colors';
 import PokemonList from './PokemonCardContainer/PokemonList/PokemonList';
@@ -23,14 +23,6 @@ export default function AppWrapper() {
   // 2.create initial state for pokemons
   const [pokemonsNames, setPokemonsNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // 3.get all pokemons [{...}, 1154] and set it
-  useEffect(() => {
-    P.getPokemonsList().then(({ results }) => {
-      setPokemonsNames(results);
-    }
-    )
-  }, []);
 
   // 4.search input
   const [searchValue, setSearchValue] = useState('');
@@ -62,7 +54,6 @@ export default function AppWrapper() {
   const lastPokemonIndex = currentPage * pokemonsPerPage + pokemonsPerPage;
   const firstPokemonIndex = lastPokemonIndex - pokemonsPerPage;
 
-  // ==================================================================================================================
   const [pokemons, setPokemons] = useState([]);
   const [filteredPokemons, setFilteredPokemons] = useState([]);
   const [filters, setFilters] = useState({
@@ -110,7 +101,6 @@ export default function AppWrapper() {
       }
       setFilteredPokemons(filtered);
       setIsLoading(false);
-      // setPokemonCount(filtered.length);
     })();
     setCurrentPage(0);
   }, [pokemonsNames, filters]);
@@ -126,7 +116,6 @@ export default function AppWrapper() {
         stats,
       }))))
   }, [pokemonsNames.length, pokemonsPerPage, currentPage, searchValue, filteredPokemons]);
-  console.log(isLoading)
 
   // 5.function for search pokemon 
   const searchedPokemon = pokemonsNames.filter(p => p.name.includes(searchValue));
@@ -137,21 +126,12 @@ export default function AppWrapper() {
     setCurrentPage(0);
   }, [pokemonsNames.length, searchValue]);
 
-  // ================================================
   const [pokemonTypes, setPokemonTypes] = useState([]);
   useEffect(() => {
     P.getTypesList().then(({ results }) => {
       setPokemonTypes(results.map(({ name }) => ({ type: name })));
     });
   }, []);
-
-
-
-  // console.log('pokemons', pokemons,'pokemons types:', pokemons.map(p => p.types.map(p => p.type).map(p => p.name)));
-  // console.log('pokemons:', pokemons, '\n', 'pokemons Names:', pokemonsNames.filter(p => p.name.includes(searchValue)), '\n', 'filtered pokemons:', filteredPokemons);
-
-  // console.log(pokemons.map(({ types }) => types.map(({ type }) => type).map(({ name }) => name).filter(name => name === 'poison')));  
-  // console.log('pokemons', pokemonTypes);
 
   return (
     <div>

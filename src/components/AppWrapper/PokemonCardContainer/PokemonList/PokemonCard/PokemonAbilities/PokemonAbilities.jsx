@@ -1,7 +1,7 @@
 import React from 'react';
-import { Chip }from '@mui/material';
+import { Chip } from '@mui/material';
 
-export default function PokemonAbilities({types}) {
+export default function PokemonAbilities({ types }) {
     let typesColor;
     return (
         <div> {types.map(t => (

@@ -1,11 +1,10 @@
-
+import React from 'react';
 import AppWrapper from './components/AppWrapper/AppWrapper';
 
 function App() {
-  const renderRoot = document.getElementById('root');
   return (
     <div>
-     <AppWrapper/>
+      <AppWrapper />
     </div>
   );
 }

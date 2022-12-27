@@ -1,10 +1,10 @@
-import { style } from "@mui/system";
+import React from 'react'
 import styles from './SearchByName.module.css'
 
-export default function ({ pokemons, searchClickHendler, setSearchValue, searchValue, isOpen, searchedPokemon, itemClickHendler }) {
+export default function SearchByName({ searchClickHendler, setSearchValue, searchValue, isOpen, searchedPokemon, itemClickHendler }) {
     return (
         <div>
-            <input type="text" placeholder='Search...' onClick={searchClickHendler} onChange={e => setSearchValue(e.target.value)} value={searchValue} style={{ position: 'relative' }} />
+            <input type="text" placeholder='Search...' onClick={searchClickHendler} onChange={e => setSearchValue((e.target.value).toLowerCase())} value={searchValue} style={{ position: 'relative' }} />
             <ul style={{ listStyle: 'none', maxHeight: 150, backgroundColor: 'white', overflow: 'auto', marginTop: 5, width: 177, padding: 0, position: 'absolute', zIndex: 5 }}>
                 {
                     searchValue && isOpen ?
